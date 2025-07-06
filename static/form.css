@@ -1,0 +1,97 @@
+/* static/css/form.css */
+
+/* Page background and font setup */
+body {
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* Form container */
+form {
+  background-color: #fff;
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
+}
+
+/* Headings */
+form h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* Label + Field container */
+form div {
+  margin-bottom: 20px;
+}
+
+/* Field label */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Input fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="submit"],
+input[type="checkbox"] {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Checkbox inline fix */
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 6px;
+}
+
+/* Submit button */
+input[type="submit"],
+button {
+  background-color: #3498db;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Hover effect on submit */
+input[type="submit"]:hover,
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Link to switch forms */
+form a {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  color: #3498db;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+form a:hover {
+  text-decoration: underline;
+}
