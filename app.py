@@ -9,7 +9,8 @@ from form import Login, Signup
 app = Flask(__name__)
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234d@awesome-db.ap-southeast-1.psdb.io/usersdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3306/usersdb'
+
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
