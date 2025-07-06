@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wearly - Fashion & Lifestyle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Google Fonts -->
+ <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="{{ url_for('static', filename='Wearly.png') }}" alt="Wearly Logo" class="logo-img">
+      <div class="logo-text">Wear<span>ly</span></div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="nav-wrapper">
+      <ul class="nav-menu with-submenus">
+        <li class="nav-item"><a href="{{ url_for('home') }}">HOME</a></li>
+        <li class="nav-item has-submenu">
+          <a href="{{ url_for('women') }}">WOMEN</a>
+          <div class="submenu">
+            <a href="{{ url_for('westernwear') }}" class="submenu-btn">Westernwear</a>
+            <a href="{{ url_for('gnightwear') }}" class="submenu-btn">Nightwear</a>
+            <a href="{{ url_for('ethnics') }}" class="submenu-btn">Ethnicwear</a>
+            <a href="{{ url_for('accessories') }}" class="submenu-btn">Accessories</a>
+            <a href="{{ url_for('gymwear') }}" class="submenu-btn">Gymwear</a>
+          </div>
+        </li>
+        <li class="nav-item has-submenu">
+          <a href="{{ url_for('men') }}">MEN</a>
+          <div class="submenu">
+            <a href="{{ url_for('topwear') }}" class="submenu-btn">Topwear</a>
+            <a href="{{ url_for('bottomwear') }}" class="submenu-btn">Bottomwear</a>
+            <a href="{{ url_for('ethnicwear') }}" class="submenu-btn">Ethnicwear</a>
+            <a href="{{ url_for('formal') }}" class="submenu-btn">Formals</a>
+          </div>
+        </li>
+        <li class="nav-item has-submenu">
+          <a href="{{ url_for('kids') }}">KIDS</a>
+          <div class="submenu">
+            <a href="{{ url_for('boys') }}" class="submenu-btn">Boys</a>
+            <a href="{{ url_for('girls') }}" class="submenu-btn">Girls</a>
+            <a href="{{ url_for('infants') }}" class="submenu-btn">Infants</a>
+          </div>
+        </li>
+        <li class="nav-item"><a href="{{ url_for('offer') }}">OFFERS</a></li>
+      </ul>
+    </nav>
+
+    <!-- Social Icons (Right Side) -->
+    <div class="header-icons">
+      <a href="{{ url_for('search') }}" title="Search" class="icon-link">
+        <img src="{{ url_for('static', filename='search.png') }}" width="22" height="22">
+      </a>
+      <a href="{{ url_for('cart_page') }}" title="Cart" class="icon-link">
+        <img src="{{ url_for('static', filename='cart.png') }}" width="22" height="22">
+      </a>
+      <a href="{{ url_for('account') }}" title="Account" class="icon-link">
+        <img src="{{ url_for('static', filename='profile.png') }}" width="22" height="22">
+      </a>
+    </div>
+  </div>
+</header>
+  <section class="content-section">
+    {% block content %}
+  
+    {% endblock %}
+
+    <script>
+    
+  document.addEventListener('DOMContentLoaded', () => {
+    function switchCategory(category) {
+      // Hide all submenus
+      document.querySelectorAll('.submenu').forEach(menu => menu.style.display = 'none');
+      const submenu = document.getElementById(`submenu-${category}`);
+      if (submenu) submenu.style.display = 'flex';
+
+      // Update active link
+      document.querySelectorAll('.nav-menu a').forEach(link => link.classList.remove('active'));
+      const activeLink = document.querySelector(`.nav-menu a[data-category="${category}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+
+    document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.addEventListener('click', e => {
+        e.preventDefault();
+        const category = tab.dataset.category;
+        switchCategory(category);
+      });
+    });
+
+    document.querySelectorAll('.submenu-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert(`Loading products for: ${btn.textContent}`);
+      });
+    });
+  });
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="product-grid">
+    {% for product_id, product in products.items() %}
+        {% if product.category=="topwear"%}
+            <div class="product-card">
+                <div class="product-header">
+                    <div class="author-avatar"></div>
+                    <span class="author-name">By Wearly</span>
+                </div>
+
+<a href="{{ url_for('product_detail_men', product_id=product_id) }}">
+        <img src="{{ url_for('static', filename='image/' + product.image) }}" alt="{{ product.name }}" class="product-main-image">
+      </a>
+                <div class="product-info">
+                    <h3>{{ product.name }}</h3>
+
+                    <p>₹{{ product.price }}</p>
+
+                    {% if product.original_price %}
+                    <p style="text-decoration: line-through; color: gray;">₹{{ product.original_price }}</p>
+                    {% endif %}
+
+                    {% if product.badge %}
+                    <span class="badge">{{ product.badge }}</span>
+                    {% endif %}
+
+                    <p>⭐ {{ product.rating }} ({{ product.reviews }} reviews)</p>
+                    <p><small>Category: {{ product.category }}</small></p>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

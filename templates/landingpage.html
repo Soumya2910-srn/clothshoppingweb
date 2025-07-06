@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wearly | Fashion Landing Page</title>
+
+  <!-- Google Fonts -->
+ <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: linear-gradient(135deg, #fdfdfd, #f5f5f5);
+}
+
+/* Navbar */
+nav.navbar {
+  width: 100%;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+   gap: 12px;
+}
+
+.logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a6b3c;
+  letter-spacing: 1px;
+}
+
+.logo-text span {
+  color: #e0a96d;
+}
+
+.logo-img {
+  height: 50px;
+  margin-left: 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.1);
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 15px;
+  text-decoration: none;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2px solid #1a6b3c;
+  background-color: transparent;
+  color: #1a6b3c;
+  transition: all 0.3s ease;
+  text-decoration:none
+}
+
+.btn:hover {
+  background-color: #1a6b3c;
+  color: #fff;
+}
+
+/* ✅ Content Section */
+.content-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5%;
+  background: linear-gradient(135deg, #ffd6e7, #c2e9fb);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Hero Content Layout */
+.hero-content {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.text-block {
+  flex: 1;
+  max-width: 600px;
+}
+
+.outfit-tag {
+  font-size: 24px;
+  color: #fff;
+  font-weight: 600;
+  background: rgba(26, 107, 60, 0.8);
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.main-heading {
+  font-size: 60px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color:#e0a96d;
+  margin-bottom: 25px;
+}
+
+.main-heading span {
+  color: #1a6b3c;
+}
+
+.sub-heading {
+  font-size: 20px;
+  color: #333;
+  max-width: 500px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.shop-btn {
+  background: white;
+  color: #4aa0d5;
+  border: 1px solid #4aa0d5;
+  padding: 15px 35px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 4px 15px rgba(74, 160, 213, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.shop-btn:hover {
+  background-color: #f0f8ff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(74, 160, 213, 0.5);
+}
+
+/* Carousel */
+.carousel-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 500px;
+  height: auto;
+  overflow: visible;
+}
+
+.carousel {
+  width: 100%;
+  position: relative;
+}
+
+.carousel-item {
+  position: absolute;
+  width: 100%;
+  transition: opacity 0.6s ease-in-out;
+  opacity: 0;
+  z-index: 0;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-item.active {
+  opacity: 1;
+  z-index: 1;
+  position: relative;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 16px;
+  color: #1a6b3c;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.carousel-btn:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+  left: -20px;
+}
+
+.next-btn {
+  right: -20px;
+}
+
+/* Social Icons */
+.social-icons {
+  margin-top: 40px;
+  display: flex;
+  gap: 20px;
+}
+
+.social-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #666;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.social-icon:hover {
+  transform: translateY(-5px);
+  color: #1a6b3c;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .text-block {
+    max-width: 100%;
+  }
+
+  .carousel {
+    max-width: 100%;
+  }
+
+  .carousel-btn {
+    display: none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo-area">
+       <img src="{{ url_for('static', filename='Wearly.png') }}" alt="Logo" class="logo-img" />
+      <div class="logo-text">Wear<span>ly</span></div>
+     
+    </div>
+
+    <div class="auth-buttons">
+  <a href="{{ url_for('logins') }}" class="btn">Login</a>
+  <a href="{{ url_for('contact') }}" class="btn">Contact Us</a>
+</div>
+
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="content-section">
+    <div class="hero-content">
+      <div class="text-block">
+        <div class="outfit-tag">Outfit of the Day</div>
+        <h1 class="main-heading">All Your <span>Styles</span> Are Here</h1>
+        <p class="sub-heading">
+          Discover the latest fashion trends and elevate your style with our exclusive, hand-picked collections designed to empower your confidence.
+        </p>
+        <a href="{{ url_for('home') }}" class="shop-btn">Shop Collection <i class="fa-solid fa-chevron-right"></i></a>
+
+        <div class="social-icons">
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+
+      <!-- Carousel -->
+      <div class="carousel-container">
+        <div class="carousel">
+          <div class="carousel-item active">
+            <img src="{{ url_for('static', filename='image/Georgette kurta set 1.jpg') }}" alt="Look 1">
+          </div>
+          <div class="carousel-item active">
+            <img src="{{ url_for('static', filename='image/1 (2).avif') }}" alt="Look 2">
+          </div>
+          <div class="carousel-item active">
+            <img src="{{ url_for('static', filename='image/78.avif') }}" alt="Look 3">
+          </div>
+
+          <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+          <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Carousel Script -->
+  <script>
+    const items = document.querySelectorAll('.carousel-item');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    let index = 0;
+
+    function showSlide(i) {
+      items.forEach((item, idx) => {
+        item.classList.toggle('active', idx === i);
+      });
+    }
+
+    nextBtn.addEventListener('click', () => {
+      index = (index + 1) % items.length;
+      showSlide(index);
+    });
+
+    prevBtn.addEventListener('click', () => {
+      index = (index - 1 + items.length) % items.length;
+      showSlide(index);
+    });
+
+    setInterval(() => {
+      index = (index + 1) % items.length;
+      showSlide(index);
+    }, 5000);
+  </script>
+
+</body>
+</html>

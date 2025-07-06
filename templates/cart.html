@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="cart-container">
+    <div class="cart-header">
+        <h1 class="cart-title">🛒 Your Shopping Cart</h1>
+        <div class="cart-count">{{ cart_items|length if cart_items else 0 }} Items</div>
+         <div class="my-orders-link" style="text-align: center; margin-top: 15px;">
+            <a href="{{ url_for('my_orders') }}" class="my-orders-btn" style="background-color: #444; padding: 8px 16px; color: white; border-radius: 6px; display: inline-block;">
+                📜 View My Orders
+            </a>
+            </div>
+    </div>
+
+    {% if cart_items %}
+        <div class="cart-content">
+            <div class="cart-items">
+                {% for product in cart_items %}
+                <div class="cart-item">
+                    <div class="item-image-container">
+                        <img src="{{ url_for('static', filename='image/' + product.image) }}" 
+                             alt="{{ product.product_name }}" class="item-image">
+                    </div>
+
+                    <div class="item-details">
+                        <h3 class="item-name">{{ product.product_name }}</h3>
+                        {% if product.selection %}
+                            <div class="item-selection">Selected: {{ product.selection }}</div>
+                        {% endif %}
+                        <div class="item-price">₹{{ product.price }}</div>
+                        <div class="item-quantity">
+                            <span class="quantity-label">Quantity:</span>
+                            <div class="quantity-controls">
+                                <a href="{{ url_for('decrease_qty', item_id=product.id) }}" class="qty-btn">−</a>
+                                <span class="quantity-value">{{ product.quantity }}</span>
+                                <a href="{{ url_for('increase_qty', item_id=product.id) }}" class="qty-btn">+</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="item-total">
+                        <div class="total-price">₹{{ (product.price * product.quantity) | round(2) }}</div>
+                        <a href="{{ url_for('remove_from_cart', item_id=product.id) }}" class="remove-btn">
+                            <span class="remove-icon">🗑️</span>
+                            Remove
+                        </a>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-card">
+                    <h3 class="summary-title">Order Summary</h3>
+
+                    {% set total = namespace(value=0) %}
+                    {% for product in cart_items %}
+                        {% set total.value = total.value + (product.price * product.quantity) %}
+                    {% endfor %}
+
+                    <div class="summary-row">
+                        <span>Subtotal ({{ cart_items|length }} items)</span>
+                        <span class="summary-price">₹{{ total.value | round(2) }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span class="summary-price free">FREE</span>
+                    </div>
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-row total-row">
+                        <span>Total</span>
+                        <span class="summary-total">₹{{ total.value | round(2) }}</span>
+                    </div>
+
+
+                    <div class="cart-actions">
+                        <a href="{{ url_for('checkout') }}"><button class="checkout-btn">💳 Proceed to Checkout</button></a>
+                        <a href="{{ url_for('clear_cart_route') }}" class="clear-cart-btn">🗑️ Clear Cart</a>
+                    </div>
+
+                     
+                </div>
+            </div>
+        </div>
+
+        <div class="continue-shopping">
+            <a href="{{ url_for('home') }}" class="continue-btn">← Continue Shopping</a>
+        </div>
+    {% else %}
+        <div class="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <h2 class="empty-cart-title">Your cart is empty</h2>
+            <p class="empty-cart-message">Looks like you haven't added anything to your cart yet</p>
+            <a href="{{ url_for('home') }}" class="shop-now-btn">🛍️ Start Shopping</a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

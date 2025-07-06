@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+    <form action="{{ url_for('search') }}" method="get" class="search-bar">
+        <input type="text" name="q" placeholder="Search by product, category, or type..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+       <div class="product-grid">
+                {% for product_id, product in results.items() %}
+                        <div class="product-card">
+                        <div class="product-header">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">By Wearly</span>
+                        </div>
+
+                        <a href="{{ url_for('product_detail_women', product_id=product_id) }}">
+                            <img src="{{ url_for('static', filename='image/' + product.image) }}" alt="{{ product.name }}" class="product-main-image">
+                        </a>
+
+                        <div class="product-info">
+                            <h3>{{ product.name }}</h3>
+                            {% if product.price==0 %}
+                                <p>₹{{ product.original_price }}</p>
+                            {% else %}
+                                <p>₹{{ product.price }}</p>
+                            {% endif %}
+                           
+
+                            {% if product.price!=0 %}
+                             <p style="text-decoration: line-through; color: gray;">₹{{ product.original_price }}</p>
+                            {% else %}
+                                <p> <p>
+
+                            {% endif %}
+
+                            {% if product.badge %}
+                            <span class="badge">{{ product.badge }}</span>
+                            {% endif %}
+
+                            <p>⭐ {{ product.rating }} ({{ product.reviews }} reviews)</p>
+                            <p><small>Category: {{ product.category }}</small></p>
+                        </div>
+                        </div>
+                    
+                {% endfor %}
+            </div>
+    {% else %}
+        {% if query %}
+            <p style="text-align: center;">No results found for "{{ query }}"</p>
+        {% endif %}
+    {% endif %}
+{% endblock content %}

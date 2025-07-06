@@ -1,0 +1,194 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 0;
+  }
+
+  .orders-container {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.4s ease-in;
+  }
+
+  .orders-container h2 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 30px;
+    color: #2c3e50;
+  }
+
+  .order-card {
+    background: linear-gradient(135deg, #fefefe, #f9f9f9);
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .order-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .order-card h4 {
+    margin-bottom: 10px;
+    color: #1e272e;
+    font-size: 22px;
+  }
+
+  .order-card p {
+    margin: 4px 0;
+    font-size: 15px;
+    color: #555;
+  }
+
+  .order-card ul {
+    list-style: none;
+    padding-left: 20px;
+    margin: 12px 0;
+  }
+
+  .order-card li {
+    margin-bottom: 5px;
+    font-size: 15px;
+    position: relative;
+  }
+
+  .order-card li::before {
+    content: '🛒';
+    position: absolute;
+    left: -20px;
+  }
+
+  .cancel-order-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: linear-gradient(to right, #ff4e50, #f36f5b);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .cancel-order-btn:hover {
+    background: linear-gradient(to right, #e84118, #ff6b6b);
+  }
+
+  .cancelled-msg {
+    color: #c0392b;
+    font-weight: 600;
+    font-style: italic;
+    margin-top: 10px;
+  }
+
+  .order-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 5px;
+  }
+
+  .order-status.Pending {
+    background-color: #fceabb;
+    color: #b36b00;
+  }
+
+  .order-status.Shipped {
+    background-color: #d0f0fd;
+    color: #0077b6;
+  }
+
+  .order-status.Delivered {
+    background-color: #d3f9d8;
+    color: #218c74;
+  }
+
+  .order-status.Cancelled {
+    background-color: #ffd6d6;
+    color: #b33939;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .orders-container {
+      padding: 20px;
+    }
+
+    .order-card {
+      padding: 15px;
+    }
+
+    .order-card h4 {
+      font-size: 20px;
+    }
+
+    .cancel-order-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="orders-container">
+  <h2>📦 My Orders</h2>
+
+  {% if orders %}
+    {% for order in orders %}
+      <div class="order-card">
+        <h4>Order ID: {{ order.id }}</h4>
+        <p><strong>📍 Address:</strong> {{ order.address }}, {{ order.city }} - {{ order.pincode }}</p>
+        <p><strong>📞 Phone:</strong> {{ order.phone }}</p>
+        <p><strong>💵 Total:</strong> ₹{{ order.total_amount }}</p>
+        <p>
+          <strong>🚚 Status:</strong>
+          <span class="order-status {{ order.status }}">{{ order.status }}</span>
+        </p>
+
+        <h5 style="margin-top: 12px; color: #2d3436;">🛍 Items:</h5>
+        <ul>
+          {% for item in order.decoded_items %}
+            <li>
+              {{ item.name }} ({{ item.selection }}) × {{ item.quantity }} — ₹{{ item.price * item.quantity }}
+            </li>
+          {% endfor %}
+        </ul>
+
+        {% if order.status != 'Cancelled' %}
+          <form action="{{ url_for('cancel_order', order_id=order.id) }}" method="post" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+            <button type="submit" class="cancel-order-btn">❌ Cancel Order</button>
+          </form>
+        {% else %}
+          <p class="cancelled-msg">🚫 This order has been cancelled.</p>
+        {% endif %}
+
+        <hr>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p style="text-align: center; font-size: 16px; color: #888;">You haven't placed any orders yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

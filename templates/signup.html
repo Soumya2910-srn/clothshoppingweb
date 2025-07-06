@@ -1,0 +1,44 @@
+<!-- templates/signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
+</head>
+<body>
+    <form action="" method="POST">
+        <h2 style="text-align: center; color: #333;">Sign Up</h2>
+
+        {{ form.hidden_tag() }}
+
+        <div>
+            {{ form.username.label }}
+            {{ form.username(size=32, placeholder='Enter your username') }}
+        </div>
+
+        <div>
+            {{ form.email.label }}
+            {{ form.email(size=32, placeholder='Enter your email') }}
+        </div>
+
+        <div>
+            {{ form.password.label }}
+            {{ form.password(size=32, placeholder='Enter your password') }}
+        </div>
+
+        <div>
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password(size=32, placeholder='Confirm your password') }}
+        </div>
+
+        <div>
+            {{ form.submit(class_='btn') }}
+        </div>
+
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="{{ url_for('logins') }}">Already have an account? Log in</a>
+        </div>
+    </form>
+</body>
+</html>

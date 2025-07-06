@@ -1,0 +1,179 @@
+{% block content %}
+<div class="admin-orders-container">
+    <div class="admin-orders-header">
+        <h2>📦 All Orders (Admin View)</h2>
+        <a href="{{ url_for('admin_dashboard') }}" class="back-btn">🔙 Back to Dashboard</a>
+    </div>
+
+    {% if orders %}
+        {% for order in orders %}
+            <div class="admin-order-card">
+                <div class="order-header">
+                    <h4>🆔 Order ID: {{ order.id }}</h4>
+                    <p><strong>Status:</strong>
+                        {% if order.status == 'Cancelled' %}
+                            <span class="status status-cancelled">Cancelled</span>
+                        {% elif order.status == 'Delivered' %}
+                            <span class="status status-delivered">Delivered</span>
+                        {% else %}
+                            <span class="status status-placed">Placed</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="order-details">
+                    <p><strong>User:</strong> {{ order.user_email }}</p>
+                    <p><strong>Phone:</strong> {{ order.phone }}</p>
+                    <p><strong>Address:</strong> {{ order.address }}, {{ order.city }} - {{ order.pincode }}</p>
+                    <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                </div>
+
+                <div class="order-items">
+                    <h5>🛍️ Items:</h5>
+                    <ul>
+                        {% for item in order.decoded_items %}
+                            <li>• {{ item.name }} ({{ item.selection or "N/A" }}) × {{ item.quantity }} — ₹{{ item.price * item.quantity }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% if order.status != 'Cancelled' and order.status != 'Delivered' %}
+                <div class="order-actions">
+                    <form action="{{ url_for('admin_cancel_order', order_id=order.id) }}" method="POST">
+                        <button type="submit" class="cancel-btn">❌ Cancel</button>
+                    </form>
+
+                    <form action="{{ url_for('admin_deliver_order', order_id=order.id) }}" method="POST">
+                        <button type="submit" class="deliver-btn">✅ Deliver</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-orders">🚫 No orders found.</p>
+    {% endif %}
+</div>
+
+<style>
+    .admin-orders-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .admin-orders-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .admin-order-card {
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: 0.3s;
+    }
+
+    .admin-order-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .status {
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .status-placed {
+        background-color: #d1f0d1;
+        color: #2e7d32;
+    }
+
+    .status-cancelled {
+        background-color: #ffe6e6;
+        color: #c62828;
+    }
+
+    .status-delivered {
+        background-color: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .order-details p {
+        margin: 6px 0;
+    }
+
+    .order-items ul {
+        padding-left: 18px;
+        margin: 10px 0;
+    }
+
+    .order-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .cancel-btn, .deliver-btn {
+        padding: 8px 14px;
+        font-size: 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .cancel-btn {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .cancel-btn:hover {
+        background-color: #c0392b;
+    }
+
+    .deliver-btn {
+        background-color: #2ecc71;
+        color: white;
+    }
+
+    .deliver-btn:hover {
+        background-color: #27ae60;
+    }
+
+    .back-btn {
+        text-decoration: none;
+        background-color: #3498db;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: background 0.3s ease;
+    }
+
+    .back-btn:hover {
+        background-color: #2980b9;
+    }
+
+    .no-orders {
+        text-align: center;
+        font-style: italic;
+        color: #888;
+    }
+</style>
+{% endblock %}

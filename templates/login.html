@@ -1,0 +1,27 @@
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
+
+<form action="" method="POST">
+    <h2 style="text-align: center; color: #333;">Login</h2>
+
+    {{ form.hidden_tag() }}
+
+    <div>
+        {{ form.email.label }}
+        {{ form.email(size=32, placeholder='Enter your email') }}
+    </div>
+
+    <div>
+        {{ form.password.label }}
+        {{ form.password(size=32, placeholder='Enter your password') }}
+    </div>
+
+    <div>
+        {{ form.submit(class_="btn") }}
+    </div>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="{{ url_for('signups') }} ">Don't have an account? Sign up</a>
+    </div>
+</form>
+{% endblock %}

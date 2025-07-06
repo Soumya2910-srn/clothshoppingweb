@@ -1,0 +1,205 @@
+{% block content %}
+
+<!-- Styles -->
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f2f5;
+    }
+
+    .admin-navbar {
+        background: linear-gradient(90deg, #343a40, #212529);
+        padding: 15px 25px;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 10px;
+        margin: 25px auto;
+        max-width: 1000px;
+    }
+
+    .admin-navbar .logo {
+        font-size: 22px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+    }
+
+    .admin-navbar a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 25px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .admin-navbar a:hover {
+        color: #00d4ff;
+    }
+
+    .dashboard-container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-container h2 {
+        text-align: center;
+        font-size: 30px;
+        margin-bottom: 40px;
+        color: #333;
+    }
+
+    .stats-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .stat-box {
+        background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+        border-left: 8px solid #007bff;
+        border-radius: 15px;
+        padding: 25px 30px;
+        width: 45%;
+        min-width: 260px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-box h4 {
+        margin: 0;
+        font-size: 18px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .stat-box.blue { border-color: #007bff; }
+    .stat-box.green { border-color: #28a745; }
+    .stat-box.red { border-color: #dc3545; }
+    .stat-box.yellow { border-color: #ffc107; }
+    .stat-box.purple { border-color: #6f42c1; }
+
+    .stat-box i {
+        font-size: 20px;
+    }
+
+    .last-center {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .chart-container {
+        margin-top: 50px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
+        .stat-box {
+            width: 100%;
+        }
+    }
+</style>
+
+<!-- Admin Navbar -->
+<div class="admin-navbar">
+    <div class="logo">🛍️ Admin Panel</div>
+    <div class="nav-links">
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_orders') }}">Orders</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</div>
+
+<!-- Dashboard Section -->
+<div class="dashboard-container">
+    <h2>📊 Admin Dashboard</h2>
+
+    <div class="stats-grid">
+        <div class="stat-box blue">
+            <h4><i class="fas fa-list"></i> Total Orders: {{ total_orders }}</h4>
+        </div>
+        <div class="stat-box green">
+            <h4><i class="fas fa-check-circle"></i> Placed Orders: {{ placed_orders }}</h4>
+        </div>
+        <div class="stat-box red">
+            <h4><i class="fas fa-times-circle"></i> Cancelled Orders: {{ cancelled_orders }}</h4>
+        </div>
+        <div class="last-center">
+            <div class="stat-box purple">
+                <h4><i class="fas fa-rupee-sign"></i> Total Revenue: ₹{{ total_revenue }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doughnut Chart -->
+    <div class="chart-container">
+        <canvas id="orderChart"></canvas>
+    </div>
+</div>
+
+<!-- FontAwesome & Chart -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script>
+    const ctx = document.getElementById('orderChart').getContext('2d');
+    const chartData = {{ chart_data | safe }};
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Order Status',
+                data: chartData.data,
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                datalabels: {
+                    formatter: (value, ctx) => {
+                        const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                        const percent = ((value / total) * 100).toFixed(1);
+                        return `${percent}%`;
+                    },
+                    color: '#111',
+                    font: {
+                        weight: 'bold'
+                    }
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    });
+</script>
+{% endblock %}

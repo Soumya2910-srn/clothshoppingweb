@@ -1,0 +1,166 @@
+{% extends "layout.html" %}
+
+{% block content %}
+            <div class="banner-slider-container">
+                <div class="banner-slider">
+                    <div class="banner-slide">
+                        <img src="{{ url_for('static', filename='h1.jpg') }}" alt="Logo" class="banner-img" />
+                    </div>
+                    
+                    <div class="banner-slide">
+                        <img src="{{ url_for('static', filename='h2.jpg') }}" alt="Logo" class="banner-img" />
+                    </div>
+                    
+                    <div class="banner-slide">
+                        <img src="{{ url_for('static', filename='h3.jpg') }}" alt="Logo" class="banner-img" />
+                    </div>
+                </div>
+                
+                <!-- Slider Navigation -->
+                <div class="slider-nav">
+                    <button class="nav-dot active" onclick="goToSlide(0)"></button>
+                    <button class="nav-dot" onclick="goToSlide(1)"></button>
+                    <button class="nav-dot" onclick="goToSlide(2)"></button>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+          <div class="product-grid">
+                {% for product_id, product in products.items() %}
+                        <div class="product-card">
+                        <div class="product-header">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">By Wearly</span>
+                        </div>
+
+                        <a href="{{ url_for('product_detail_women', product_id=product_id) }}">
+                            <img src="{{ url_for('static', filename='image/' + product.image) }}" alt="{{ product.name }}" class="product-main-image">
+                        </a>
+
+                        <div class="product-info">
+                            <h3>{{ product.name }}</h3>
+                            {% if product.price==0 %}
+                                <p>₹{{ product.original_price }}</p>
+                            {% else %}
+                                <p>₹{{ product.price }}</p>
+                            {% endif %}
+                           
+
+                            {% if product.price!=0 %}
+                             <p style="text-decoration: line-through; color: gray;">₹{{ product.original_price }}</p>
+                            {% else %}
+                                <p> <p>
+
+                            {% endif %}
+
+                            {% if product.badge %}
+                            <span class="badge">{{ product.badge }}</span>
+                            {% endif %}
+
+                            <p>⭐ {{ product.rating }} ({{ product.reviews }} reviews)</p>
+                            <p><small>Category: {{ product.category }}</small></p>
+                        </div>
+                        </div>
+                    
+                {% endfor %}
+            </div>
+        <script>
+let currentSlide = 0;
+const totalSlides = 3;
+const slideInterval = 4000; // 4 seconds
+let autoSlideTimer;
+let progressTimer;
+
+function updateSlider() {
+    const slider = document.querySelector('.banner-slider');
+    const dots = document.querySelectorAll('.nav-dot');
+    const progressFill = document.querySelector('.progress-fill');
+    
+    // Update slider position
+    slider.style.transform = `translateX(-${currentSlide * 33.333}%)`;
+    
+    // Update dots
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+    
+    // Reset and start progress bar
+    progressFill.style.width = '0%';
+    clearInterval(progressTimer);
+    
+    let progress = 0;
+    progressTimer = setInterval(() => {
+        progress += 100 / (slideInterval / 50); // Update every 50ms
+        progressFill.style.width = progress + '%';
+        
+        if (progress >= 100) {
+            clearInterval(progressTimer);
+        }
+    }, 50);
+}
+
+function goToSlide(slideIndex) {
+    currentSlide = slideIndex;
+    updateSlider();
+    resetAutoSlide();
+}
+
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateSlider();
+}
+
+function resetAutoSlide() {
+    clearInterval(autoSlideTimer);
+    autoSlideTimer = setInterval(nextSlide, slideInterval);
+}
+
+// Initialize slider
+document.addEventListener('DOMContentLoaded', function() {
+    updateSlider();
+    resetAutoSlide();
+    
+    // Pause auto-slide on hover
+    const sliderContainer = document.querySelector('.banner-slider-container');
+    sliderContainer.addEventListener('mouseenter', () => {
+        clearInterval(autoSlideTimer);
+        clearInterval(progressTimer);
+    });
+    
+    sliderContainer.addEventListener('mouseleave', () => {
+        resetAutoSlide();
+        updateSlider();
+    });
+    
+    // Touch/swipe support for mobile
+    let startX = 0;
+    let endX = 0;
+    
+    sliderContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+    
+    sliderContainer.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        const difference = startX - endX;
+        
+        if (Math.abs(difference) > 50) { // Minimum swipe distance
+            if (difference > 0) {
+                // Swipe left - next slide
+                currentSlide = (currentSlide + 1) % totalSlides;
+            } else {
+                // Swipe right - previous slide
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            }
+            updateSlider();
+            resetAutoSlide();
+        }
+    });
+});
+</script>
+{% endblock %}
