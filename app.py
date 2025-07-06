@@ -9,7 +9,8 @@ from form import Login, Signup
 app = Flask(__name__)
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3306/usersdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@yourhost.planetscale.com/usersdb'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SECRET_KEY"] = "084c798ae26ad8bb088a191feb8224f772"
 db = SQLAlchemy(app)
